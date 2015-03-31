@@ -35,7 +35,7 @@ public:
 	void loadStats(string name, stats loadedStats, int level, int exp);
 	void changeStats(stats changeStatsBy);
 	void changeHealth(int change);
-	void incrementLevel(int &exp);
+	void incrementLevel(int change);
 	void printPlayerStats();
 	void attack();
 	void strongAttack();
@@ -66,7 +66,6 @@ private:
 	int playerCurrentTP;
 }gPlayer;
 
-//Define functions.
 class Enemy
 {
 public:
@@ -77,6 +76,7 @@ public:
 	int getAbility(){ return enemyStats.ability; }
 	int getReflex(){ return enemyStats.reflex; }
 	int getDefense(){ return enemyStats.defense; }
+	int getExperience(){ return enemyExperience; }
 	int makeAction();
 	void changeCurrentHP(int change);
 private:
@@ -135,19 +135,18 @@ void Player::changeStats(stats changeStatsBy)
 	playerStats.defense += changeStatsBy.defense;
 }
 
-
 void Player::changeHealth(int change)
 {
 	playerCurrentHP += change;
 }
 
-void Player::incrementLevel(int &exp)
+void Player::incrementLevel(int change)
 {
-	playerLevel += (exp/100);
-	exp = exp % 100;
-	int playerMaxHP = static_cast<int>((0.4461*(playerLevel*playerLevel)) + (55.9651*playerLevel) + 86.5889);
+	playerLevel += ((playerExperience+change)/100);
+	playerExperience = (playerExperience+change) % 100;
+	playerMaxHP = static_cast<int>((0.4461*(playerLevel*playerLevel)) + (55.9651*playerLevel) + 86.5889);
 	playerCurrentHP = playerMaxHP;
-	int playerMaxTP = static_cast<int>((0.0416*(playerLevel*playerLevel)) + (0.4473*playerLevel) + 46.511);
+	playerMaxTP = static_cast<int>((0.0416*(playerLevel*playerLevel)) + (0.4473*playerLevel) + 46.511);
 	playerCurrentTP = playerMaxTP;
 }
 
@@ -442,10 +441,14 @@ void mainMenu()
 			clearScreen();
 			fileSave();
 			cout << "Saved game. \n";
+			Sleep(1000);
+			clearScreen();
 		}
 		else if (menuCom == 'i')
 		{
 			cout << "Item Shop selected \n";
+			Sleep(1000);
+			clearScreen();
 			//itemShop();
 		}
 		else if (menuCom == 'e')
@@ -512,12 +515,19 @@ void battleArena()
 		if (gPlayer.getCurrentHP() <= 0)
 		{
 			cout << "Player has been killed. \n";
+			Sleep(1000);
+			clearScreen();
 			dead = true;
+
 		}
 		if (challengerE.getCurrentHP() <= 0)
 		{
 			cout << "Enemy has been killed. \n";
+			gPlayer.incrementLevel(challengerE.getExperience());
+			Sleep(1000);
+			clearScreen();
 			dead = true;
+
 		}
 	}
 }
