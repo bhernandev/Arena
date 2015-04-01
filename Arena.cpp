@@ -486,7 +486,10 @@ void battleArena()
 		}
 		else if (action == 's')
 		{
-
+			int playerDamage;
+			playerDamage = genPrecAtkDmg(gPlayer.getAbility(), gPlayer.getWepAtk());
+			int damageReduc = static_cast<int>(playerDamage*(.35*(challengerE.getDefense() / 100)));
+			challengerE.changeCurrentHP(damageReduc - playerDamage);
 		}
 		else if (action == 'd')
 		{
@@ -539,9 +542,12 @@ int genAtkDmg(int str, int wepAtk)
 	return damage;
 }
 
-//int genPrecAtkDmg(int abi, int wepAtk)
-//{
-//}
+int genPrecAtkDmg(int abi, int wepAtk)
+{
+	int damage;
+	damage = (abi * abi) + (wepAtk * wepAtk);
+	return damage;
+}
 
 int main(int argc, char* argv[])
 {
