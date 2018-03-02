@@ -1,5 +1,4 @@
 #include <iostream>
-#include <windows.h>
 #include <time.h>
 #include <fstream>
 #include <string>
@@ -89,7 +88,6 @@ private:
 };
 
 
-void clearScreen();
 bool takeCommand(char check);
 void splash();
 void loadSave(int file);
@@ -100,12 +98,13 @@ void fileMenu();
 void mainMenu();
 void battleArena();
 int genAtkDmg(int str, int wepAtk);
+int genPrecAtkDmg(int ability, int wepAtk);
 
 //Start of Player Methods
 
 Player::Player()
 {
-	playerStats = { 10, 10, 10, 10 };
+	playerStats = {10, 10, 10, 10};
 	playerLevel = 1;
 	playerMaxHP = 360;
 	playerCurrentHP = 360;
@@ -153,22 +152,13 @@ void Player::incrementLevel(int change)
 void Player::printPlayerStats()
 {
 	cout << "Name: " << playerName << endl;
-	Sleep(333);
 	cout << "Level: " << playerLevel << " at " << playerExperience << " exp." << endl;
-	Sleep(333);
 	cout << "Strength: " << playerStats.strength << endl;
-	Sleep(333);
 	cout << "Ability: " << playerStats.ability << endl;
-	Sleep(333);
 	cout << "Reflex: " << playerStats.reflex << endl;
-	Sleep(333);
 	cout << "Defense: " << playerStats.defense << endl;
-	Sleep(333);
 	cout << "HP: " << playerCurrentHP << "/" << playerMaxHP << endl;
-	Sleep(333);
 	cout << "TP: " << playerCurrentTP << "/" << playerMaxTP << endl;
-	Sleep(7000);
-	clearScreen();
 }
 
 //Start of Enemy Methods
@@ -194,13 +184,6 @@ void Enemy::changeCurrentHP(int change)
 	enemyCurrentHP += change;
 }
 
-//Start of General Methods
-
-void clearScreen()
-{
-	cout << string(100, '\n');
-}
-
 char takeCommand()
 {
 	char userCommand;
@@ -215,7 +198,6 @@ char takeCommand()
 void splash()
 {
 	cout << "<=====Welcome to ARENA : Alternate Reality Engaging Numerous Apparitions=====>\n";
-	Sleep(500);
 }
 
 void loadSave(ifstream& stream, string file)
@@ -281,7 +263,6 @@ void fileSaveChoose()
 	fileStat >> name3;
 	fileStat.close();
 	cout << "Please choose which save slot to save to. \n";
-	Sleep(500);
 	cout << "File 1: " << name1 << "  (Enter '1') \n";
 	cout << "File 2: " << name2 << "  (Enter '2') \n";
 	cout << "File 3: " << name3 << "  (Enter '3') \n";
@@ -291,23 +272,19 @@ void fileSaveChoose()
 		cout << "Incorrect command. \n";
 		file = takeCommand();
 	}
-	clearScreen();
 	if (file == 81)
 	{
 		cout << "File 1 Selected. \n";
-		Sleep(500);
 		gFile = 1;
 	}
 	else if (file == 82)
 	{
 		cout << "File 2 Selected. \n";
-		Sleep(500);
 		gFile = 2;
 	}
 	else if (file == 83)
 	{
 		cout << "File 3 Selected. \n";
-		Sleep(500);
 		gFile = 3;
 	}
 }
@@ -331,12 +308,10 @@ void fileLoad()
 	fileStat >> name3;
 	fileStat.close();
 	cout << "Please choose which file to load. \n";
-	Sleep(500);
 	cout << "File 1: " << name1 << "  (Enter '1') \n";
 	cout << "File 2: " << name2 << "  (Enter '2') \n";
 	cout << "File 3: " << name3 << "  (Enter '3') \n";
 	char file = takeCommand();
-	clearScreen();
 	while (file <= 80 || file >= 84)
 	{
 		cout << "Incorrect command. \n";
@@ -345,21 +320,18 @@ void fileLoad()
 	if (file == 81)
 	{
 		cout << "File 1 Selected. \n";
-		Sleep(500);
 		loadSave(fileStat, "1");
 		gFile = 1;
 	}
 	else if (file == 82)
 	{
 		cout << "File 2 Selected. \n";
-		Sleep(500);
 		loadSave(fileStat, "2");
 		gFile = 2;
 	}
 	else if (file == 83)
 	{
 		cout << "File 3 Selected. \n";
-		Sleep(500);
 		loadSave(fileStat, "3");
 		gFile = 3;
 	}
@@ -371,18 +343,13 @@ void fileMenu()
 	while (!cont)
 	{
 		cout << "                              New Game (Enter 'N')" << endl;
-		Sleep(500);
 		cout << "                              Continue (Enter 'C')" << endl;
-		Sleep(1000);
 		char menuCom = takeCommand();
-		clearScreen();
 		if (menuCom == 'n')
 		{
 			cout << "New Game selected. \n";
-			Sleep(1000);
 			fileSaveChoose();
 			cout << "Please enter your warrior's name. \n";
-			Sleep(1000);
 			string newName;
 			cin >> newName;
 			gPlayer.loadStats(newName, { 10, 10, 10, 10 }, 1, 1);
@@ -391,7 +358,6 @@ void fileMenu()
 		else if (menuCom == 'c')
 		{
 			cout << "Continue selected. \n";
-			Sleep(1000);
 			fileLoad();
 			cont = true;
 		}
@@ -400,7 +366,6 @@ void fileMenu()
 			cout << "Incorrect command. \n";
 		}
 	}
-	clearScreen();
 }
 
 void mainMenu()
@@ -409,46 +374,30 @@ void mainMenu()
 	while (!quit)
 	{
 		cout << "Arena ('A') \n";
-		Sleep(333);
 		cout << "Character Info ('C') \n";
-		Sleep(333);
 		cout << "Item Shop ('I') \n";
-		Sleep(333);
 		cout << "Save Game ('S') \n";
-		Sleep(333);
 		cout << "Exit Game ('E') \n";
-		Sleep(333);
 		char menuCom = takeCommand();
-		clearScreen();
 		if (menuCom == 'a')
 		{
 			cout << "Battle in Arena selected. \n";
-			Sleep(1000);
-			clearScreen();
 			battleArena();
 		}
 		else if (menuCom == 'c')
 		{
 			cout << "Character Info selected. \n";
-			Sleep(1000);
-			clearScreen();
 			gPlayer.printPlayerStats();
 		}
 		else if (menuCom == 's')
 		{
 			cout << "Save game selected. \n";
-			Sleep(1000);
-			clearScreen();
 			fileSave();
 			cout << "Saved game. \n";
-			Sleep(1000);
-			clearScreen();
 		}
 		else if (menuCom == 'i')
 		{
 			cout << "Item Shop selected \n";
-			Sleep(1000);
-			clearScreen();
 			//itemShop();
 		}
 		else if (menuCom == 'e')
@@ -476,7 +425,6 @@ void battleArena()
 		cout << "Player HP: " << pCurrentHP << "/" << pMaxHP << endl << endl;
 		cout << "Enemy HP: " << eCurrentHP << "/" << eMaxHP << endl;
 		char action = takeCommand();
-		clearScreen();
 		if (action == 'a')
 		{
 			int playerDamage;
@@ -493,7 +441,7 @@ void battleArena()
 		}
 		else if (action == 'd')
 		{
-
+			int damageReduc = static_cast<int>(.50);
 		}
 		else if (action == 'i')
 		{
@@ -505,8 +453,6 @@ void battleArena()
 			if (success > 49)
 			{
 				cout << "Successfully escaped! \n";
-				Sleep(1500);
-				clearScreen();
 				mainMenu();
 			}
 			cout << "Failed to escape! \n";
@@ -518,8 +464,6 @@ void battleArena()
 		if (gPlayer.getCurrentHP() <= 0)
 		{
 			cout << "Player has been killed. \n";
-			Sleep(1000);
-			clearScreen();
 			dead = true;
 
 		}
@@ -527,8 +471,6 @@ void battleArena()
 		{
 			cout << "Enemy has been killed. \n";
 			gPlayer.incrementLevel(challengerE.getExperience());
-			Sleep(1000);
-			clearScreen();
 			dead = true;
 
 		}
